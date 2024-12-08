@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const ProductCard = ({ product }) => {
@@ -30,9 +31,11 @@ const ProductCard = ({ product }) => {
     <div className="flex flex-col items-center w-72 lg:max-w-72 m-1 p-4 border border-gray-300 rounded-lg hover:shadow-lg transition-all">
       <Link href={`/product/${product.id}`} className="block">
         {/* Ürün Görseli */}
-        <img
+        <Image
           src={product.image}
           alt={product.name}
+          width={400}
+          height={300}
           className="w-full h-80 object-cover rounded-t-lg"
         />
 

@@ -1,55 +1,116 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { FaUser, FaShoppingCart } from 'react-icons/fa'; // Import React Icons for user and shopping cart
-import CartDropdown from './CartDropdown'; // Import the CartDropdown component
+import Image from 'next/image';
+import { FaUser, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
+import { useSelector } from 'react-redux'; 
 
 const Navbar = () => {
-  const [cartOpen, setCartOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Get user data from the Redux store (auth slice)
+  const user = useSelector((state) => state.auth.user);
 
   return (
-    <nav className="bg-gray-800 px-6 py-4 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-gray-200 px-6 py-4 shadow-md">
+      <div className="container mx-auto flex justify-between items-center max-w-[1400px]">
         {/* Logo */}
-        <Link href="/" className="text-white text-xl font-bold hover:text-blue-400">
-          LOGO
+        <Link href="/" className="flex items-center">
+          <Image src="/images/logo.png" alt="Logo" width={100} height={50} />
         </Link>
 
+        {/* Hamburger Icon for Mobile */}
+        <div className="lg:hidden flex items-center space-x-4">
+          
+
+          {/* Profile & Cart for Mobile */}
+          <div className="flex items-center space-x-4">
+            {/* Conditional rendering for profile or login button */}
+            {user ? (
+              <Link href="/profile" className="text-black text-xl hover:text-blue-400">
+                <FaUser />
+              </Link>
+            ) : (
+              <Link
+                href="/register"
+                className="text-black text-base font-medium hover:text-gray-900 px-4 py-2 rounded-[20px] bg-gray-300 hover:bg-gray-400"
+              >
+                Kayit ol
+              </Link>
+            )}
+
+            {/* Cart Icon */}
+            <button
+              onClick={() => setCartOpen(!cartOpen)}
+              className="text-black text-xl hover:text-gray-400"
+            >
+              <FaShoppingCart />
+            </button>
+          </div>
+          
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-black text-2xl"
+          >
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
         {/* Navigation Links (Center) */}
-        <ul className="flex space-x-6 mx-auto">
-          <li>
-            <Link href="/" className="text-white text-base font-medium hover:text-blue-400">
+        <ul
+          className={`lg:flex lg:space-x-6 absolute lg:static bg-gray-200 top-16 left-0 w-full lg:w-auto transition-transform transform ${
+            menuOpen ? 'translate-x-0' : '-translate-x-full'
+          } lg:translate-x-0`}
+        >
+          <li className="border-b lg:border-none">
+            <Link
+              href="/"
+              className="block text-black text-base font-medium hover:text-blue-400 p-4 lg:p-0"
+            >
               Home
             </Link>
           </li>
-          <li>
-            <Link href="/shop" className="text-white text-base font-medium hover:text-blue-400">
+          <li className="border-b lg:border-none">
+            <Link
+              href="/products"
+              className="block text-black text-base font-medium hover:text-blue-400 p-4 lg:p-0"
+            >
               Products
             </Link>
           </li>
-          <li>
-            <Link href="/about" className="text-white text-base font-medium hover:text-blue-400">
+          <li className="border-b lg:border-none">
+            <Link
+              href="/about"
+              className="block text-black text-base font-medium hover:text-blue-400 p-4 lg:p-0"
+            >
               About Us
             </Link>
           </li>
         </ul>
 
-        {/* Profile & Cart (Right Side) */}
-        <div className="flex items-center space-x-6">
-          {/* Profile Icon */}
-          <Link href="/profile" className="text-white text-xl hover:text-blue-400">
-            <FaUser /> {/* React Icon for user */}
-          </Link>
+        {/* Profile & Cart (Right Side for Desktop) */}
+        <div className="hidden lg:flex items-center space-x-6">
+          {/* Conditional rendering for profile or login button */}
+          {user ? (
+            <Link href="/profile" className="text-black text-xl hover:text-blue-400">
+              <FaUser />
+            </Link>
+          ) : (
+            <Link
+              href="/register"
+              className="text-black text-base font-medium hover:text-gray-900 px-4 py-2 rounded-[20px] bg-gray-300 hover:bg-gray-400"
+            >
+              Kayit ol
+            </Link>
+          )}
 
           {/* Cart Icon */}
-          <button onClick={() => setCartOpen(!cartOpen)} className="text-white text-xl hover:text-blue-400">
-            <FaShoppingCart /> {/* React Icon for shopping cart */}
-          </button>
+         
         </div>
       </div>
 
       {/* Cart Dropdown */}
-      {cartOpen && <CartDropdown />}
+     
     </nav>
   );
 };

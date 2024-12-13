@@ -1,22 +1,33 @@
 'use client';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation'; 
+import { register } from '@/redux/auth/authActions';
 
 const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('CUSTOMER');
   const [error, setError] = useState('');
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       setError('Şifreler eşleşmiyor!');
       return;
     }
-
     setError('');
-    // Form gönderimi işlemi
-    console.log('Form submitted');
+    try {
+      await dispatch(register(email, password, username, role));
+      router.push('/login');
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -24,15 +35,17 @@ const Register = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">Kayıt Ol</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Ad Soyad
+          <div className='text-gray-800'>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              Kullanıcı Adı
             </label>
             <input
               type="text"
-              id="name"
-              placeholder="Adınız ve Soyadınız"
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              id="username"
+              placeholder="Kullanıcı adınızı girin"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800"
               required
             />
           </div>
@@ -44,7 +57,9 @@ const Register = () => {
               type="email"
               id="email"
               placeholder="Email adresiniz"
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800"
               required
             />
           </div>
@@ -58,7 +73,7 @@ const Register = () => {
               placeholder="Şifrenizi belirleyin"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800"
               required
             />
           </div>
@@ -72,7 +87,7 @@ const Register = () => {
               placeholder="Şifrenizi tekrar girin"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800"
               required
             />
           </div>
@@ -83,24 +98,27 @@ const Register = () => {
               <label className="flex items-center">
                 <input
                   type="radio"
-                  name="userType"
-                  value="user"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                  required
+                  name="user"
+                  value="CUSTOMER"
+                  checked={role === 'CUSTOMER'}
+                  onChange={() => setRole('CUSTOMER')}
+                  className="h-5 w-5 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="ml-2 text-sm text-gray-700">Normal Kullanıcı</span>
               </label>
               <label className="flex items-center">
                 <input
                   type="radio"
-                  name="userType"
-                  value="seller"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                  required
+                  name="role"
+                  value="ADMIN"
+                  checked={role === 'ADMIN'}
+                  onChange={() => setRole('ADMIN')}
+                  className="h-5 w-5 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="ml-2 text-sm text-gray-700">Satıcı</span>
               </label>
             </div>
+
           </div>
           <button
             type="submit"

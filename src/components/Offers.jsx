@@ -48,7 +48,7 @@ const Offers = () => {
         <div className='w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 my-8'>
             {offers.map((offer) => (
                 <Link href={offer.link} key={offer.id} className="rounded-lg overflow-hidden flex flex-col items-center">
-                    <Image src={offer.image} alt="Content Image" width={100} height={100} className=" object-cover rounded-full" />
+                    <Image src={offer.image} alt="Content Image" width={100} height={100} className=" object-cover rounded-full h-auto w-auto" />
                     <h2 className='text-base font-semibold max-w-[100px] text-center mt-2'>{offer.title}</h2>
                 
                 </Link>

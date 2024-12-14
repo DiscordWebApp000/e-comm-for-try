@@ -45,9 +45,9 @@ const Profile = () => {
   };
 
   return (
-    <>
+    <div className='bg-gray-100 w-full'>
       <Navbar />
-      <div className="min-h-screen bg-gray-50 p-6 flex flex-col lg:flex-row gap-6 text-black">
+      <div className="min-h-screen bg-gray-100 p-6 flex flex-col lg:flex-row gap-6 text-black max-w-[1400px] mx-auto">
         <DashboardMenu activeTab={activeTab} handleTabChange={handleTabChange} user={user} />
 
         <div className="flex-1 space-y-6">
@@ -67,7 +67,7 @@ const Profile = () => {
           {activeTab === 'createProduct' && <CreateProduct />} 
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

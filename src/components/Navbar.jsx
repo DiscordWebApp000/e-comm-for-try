@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center max-w-[1400px]">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image src="/images/logo.png" alt="Logo" width={100} height={50} />
+          <Image src="/images/logo.png" alt="Logo" width={100} height={50} className="w-auto h-auto" />
         </Link>
 
         <div className="lg:hidden flex items-center space-x-4">

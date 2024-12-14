@@ -5,9 +5,9 @@ import Footer from '@/components/Footer';
 
 const AboutUs = () => {
   return (
-    <div> 
+    <div className="bg-gray-100 "> 
         <Navbar />
-        <div className="bg-white text-gray-800 p-8 md:p-16">
+        <div className="bg-gray-100 text-gray-800 p-8 md:p-16 max-w-[1440px] mx-auto">
         {/* Header Section */}
         <section className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900">Hakkımızda</h1>

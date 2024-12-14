@@ -1,4 +1,3 @@
-// actions/productDetailsActions.js
 import { fetchProductDetailsAPI } from '@/utils/api';
 
 export const fetchProductDetails = (productId) => {

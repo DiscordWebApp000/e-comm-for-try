@@ -16,9 +16,10 @@ const Page = () => {
     dispatch(login(email, password)); 
   };
 
+  // Check if the user is logged in and redirect to home page if true
   useEffect(() => {
     if (user) {
-      router.push('/');
+      router.push('/'); 
     }
   }, [user, router]); 
 

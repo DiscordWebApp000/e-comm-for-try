@@ -7,7 +7,6 @@ import { fetchUserProducts, updateUserProduct, deleteUserProduct } from '@/redux
 const UserProducts = ({ token }) => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.userProducts);
-  console.log(products);
 
   const [editingProduct, setEditingProduct] = useState(null);
   const [updatedData, setUpdatedData] = useState({
@@ -17,10 +16,12 @@ const UserProducts = ({ token }) => {
     file: null,
   });
 
+  // Fetch user products when the component mounts
   useEffect(() => {
     dispatch(fetchUserProducts(token));
   }, [dispatch]);
 
+  // Set the product data into the form for editing
   const handleEditClick = (product) => {
     setEditingProduct(product.id);
     setUpdatedData({
@@ -30,6 +31,8 @@ const UserProducts = ({ token }) => {
       file: null,
     });
   };
+
+  // Handle the update of the product data
   const handleUpdate = (e, productId) => {
     e.preventDefault();
     const formData = new FormData();
@@ -40,19 +43,19 @@ const UserProducts = ({ token }) => {
       formData.append('file', updatedData.file);
     }
 
-    // Update product
+    // Dispatch the update action
     dispatch(updateUserProduct(productId, formData, token))
       .then(() => {
-        // After updating, fetch the latest products
         dispatch(fetchUserProducts(token));
         setEditingProduct(null);
       })
       .catch((err) => console.error("Error updating product", err));
   };
 
+  // Handle the deletion of a product
   const handleDelete = (productId) => {
-    if (window.confirm('Bu ürünü silmek istediğinize emin misiniz?')) {
-      // Delete product
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      // Dispatch the delete action
       dispatch(deleteUserProduct(token, productId))
         .then(() => {
           // After deleting, fetch the latest products
@@ -62,19 +65,20 @@ const UserProducts = ({ token }) => {
     }
   };
 
-  if (loading) return <div>Yükleniyor...</div>;
-  if (error) return <div>Hata: {error}</div>;
+  // Loading and error handling UI
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold text-gray-800 mb-6">Ürünlerim</h2>
+      <h2 className="text-xl font-semibold text-gray-800 mb-6">My Products</h2>
       <ul className="space-y-4">
         {products.map((product) => (
           <li
             key={`${product.id}`}
             className="flex flex-col md:flex-row justify-between items-center bg-gray-100 p-4 rounded-md space-y-4 md:space-y-0"
           >
-            {editingProduct === product.id ? ( // Sadece tıklanan ürün için düzenleme modunu kontrol et
+            {editingProduct === product.id ? ( // Check edit mode for the clicked product
               <form
                 onSubmit={(e) => handleUpdate(e, product.id)}
                 className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4"
@@ -83,20 +87,20 @@ const UserProducts = ({ token }) => {
                   type="text"
                   value={updatedData.name}
                   onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
-                  placeholder="Ürün Adı"
+                  placeholder="Product Name"
                   className="border p-2 rounded-md"
                 />
                 <input
                   type="number"
                   value={updatedData.price}
                   onChange={(e) => setUpdatedData({ ...updatedData, price: e.target.value })}
-                  placeholder="Ürün Fiyatı"
+                  placeholder="Product Price"
                   className="border p-2 rounded-md"
                 />
                 <textarea
                   value={updatedData.description}
                   onChange={(e) => setUpdatedData({ ...updatedData, description: e.target.value })}
-                  placeholder="Ürün Açıklaması"
+                  placeholder="Product Description"
                   className="border p-2 rounded-md"
                 />
                 <input
@@ -108,14 +112,14 @@ const UserProducts = ({ token }) => {
                   type="submit"
                   className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                 >
-                  Kaydet
+                  Save
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingProduct(null)}
                   className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                 >
-                  İptal
+                  Cancel
                 </button>
               </form>
             ) : (
@@ -128,13 +132,13 @@ const UserProducts = ({ token }) => {
                     onClick={() => handleEditClick(product)}
                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                   >
-                    Düzenle
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDelete(product.id)}
                     className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
                   >
-                    Sil
+                    Delete
                   </button>
                 </div>
               </>

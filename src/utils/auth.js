@@ -1,48 +1,48 @@
 import jwt from 'jsonwebtoken';
 
-// Token'ı localStorage'a kaydet
+// Save the token to localStorage
 export const saveToken = (token) => {
   if (token) {
     localStorage.setItem('authToken', token);
   } else {
-    console.error('Token boş olamaz!');
+    console.error('Token cannot be empty!');
   }
 };
 
-// Token'ı localStorage'dan getir
+// Retrieve the token from localStorage
 export const getToken = () => {
   return localStorage.getItem('authToken');
 };
 
-// Token'ı decode et ve userRole döndür
+// Decode the token and return the userRole
 export const decodeToken = () => {
   try {
-    const token = getToken(); // Token'ı al
+    const token = getToken(); 
     if (!token) {
-      console.error('Token bulunamadı!');
-      return null; // Token yoksa null döner
+      console.error('Token not found!');
+      return null;
     }
 
-    const decoded = jwt.decode(token); // Token'ı decode et
+    const decoded = jwt.decode(token); 
     if (!decoded) {
-      console.error('Token çözümleme başarısız!');
-      return null; // Decode başarısızsa null döner
+      console.error('Token decoding failed!');
+      return null; 
     }
 
-    const userRole = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']; // Role bilgisini al
-    return { ...decoded, userRole }; // Tüm decoded bilgiyi ve userRole'u döndür
+    const userRole = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']; // Get the role information
+    return { ...decoded, userRole }; 
   } catch (error) {
-    console.error('Token çözümleme sırasında bir hata oluştu:', error);
+    console.error('An error occurred during token decoding:', error);
     return null;
   }
 };
 
-// Token'ı temizle
+// Clear the token from localStorage
 export const clearToken = () => {
   localStorage.removeItem('authToken');
 };
 
-// Token'ın geçerliliğini kontrol et
+// Check if the token is valid
 export const isTokenValid = () => {
   const token = getToken();
   if (!token) return false;
@@ -51,45 +51,42 @@ export const isTokenValid = () => {
     const decoded = jwt.decode(token);
     if (!decoded) return false;
 
-    const expiration = decoded.exp * 1000; // JWT expiration time is in seconds, convert it to milliseconds
+    const expiration = decoded.exp * 1000; 
     if (Date.now() > expiration) {
-      clearToken(); // Token expired, so clear it
+      clearToken();
       return false;
     }
     return true; // Token is valid
   } catch (error) {
-    console.error('Geçerlilik kontrolü sırasında bir hata oluştu:', error);
+    console.error('An error occurred during validity check:', error);
     return false;
   }
 };
 
-// Sayfa açıldığında token'ı kontrol et
+// Check the token when the page is loaded
 export const checkToken = () => {
   return (dispatch) => {
-    const token = getToken(); // Token'ı localStorage'dan al
+    const token = getToken();
 
     if (!token) {
-      console.log('Token yok, giriş yapılması gerekiyor.');
+      console.log('No token, login required.');
       dispatch({
         type: 'CHECK_TOKEN',
-        payload: { token: null, user: null }, // Token yoksa state'i sıfırla
+        payload: { token: null, user: null }, 
       });
       return;
     }
 
-    const isValid = isTokenValid(); // Token'ın geçerliliğini kontrol et
+    const isValid = isTokenValid(); // Check the token validity
     if (!isValid) {
-      console.log('Token süresi dolmuş, oturum kapatılıyor.');
-      clearToken(); // Token süresi dolmuşsa temizle
+      console.log('Token expired, logging out.');
+      clearToken(); 
       dispatch({
         type: 'CHECK_TOKEN',
-        payload: { token: null, user: null }, // Geçersiz token, state'i sıfırla
+        payload: { token: null, user: null }, 
       });
       return;
     }
 
-    
   };
 };
-
-

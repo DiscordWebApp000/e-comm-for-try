@@ -2,23 +2,27 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import Footer from '@/components/Footer';
 import HomeNewsCard from '@/components/HomeNewsCard';
 import Offers from '@/components/Offers';
-import {  fetchProductsData } from '@/redux/products/productActions'; 
+import { fetchProductsData } from '@/redux/products/productActions'; 
 import { checkAuthToken } from '@/redux/auth/authActions';
+
 const Home = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { products: Products, loading, error } = useSelector((state) => state.products);
-  
+  const { user } = useSelector((state) => state.auth); 
 
   useEffect(() => {
+    // Fetch products and check authentication status
     dispatch(fetchProductsData());
     dispatch(checkAuthToken());
-  }, []);
 
+  }, []); 
 
   return (
     <div className="bg-gray-100 text-gray-900">
@@ -30,7 +34,6 @@ const Home = () => {
           <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
             Öne Çıkan Ürünler
           </h1>
-          {/* Yüklenme, hata veya ürün durumu */}
           {loading ? (
             <p className="text-center">Ürünler yükleniyor...</p>
           ) : error ? (

@@ -6,27 +6,25 @@ const CreateProductForm = () => {
   const dispatch = useDispatch();
   const { loading, error, products } = useSelector((state) => state.products);
 
-  // Form verilerini state'de tutuyoruz
+  // Storing form data in state
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState('');
-  const [message, setMessage] = useState(''); // For general message (success or error)
+  const [message, setMessage] = useState(''); 
 
-  // Form gönderildiğinde çağrılacak işlev
+  // Function to be called when the form is submitted
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Desteklenen dosya formatları
     const allowedFormats = ['image/png', 'image/jpg', 'image/jpeg'];
 
-    // Eğer resim eklenmişse formatı kontrol et
     if (file && !allowedFormats.includes(file.type)) {
-      alert('Lütfen sadece PNG, JPG veya JPEG formatında bir dosya yükleyin.');
+      alert('Please upload a file in PNG, JPG, or JPEG format.');
       return;
     }
 
-    // FormData nesnesi oluşturuyoruz
+    // Creating a FormData object
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', price);
@@ -35,18 +33,18 @@ const CreateProductForm = () => {
 
     await dispatch(createProduct(formData));
 
-    // Formu sıfırlıyoruz
+    // Reset the form
     setName('');
     setPrice('');
     setFile(null);
     setDescription('');
 
     if (error) {
-      setMessage(`Ürün oluşturulurken bir hata oluştu: ${error}`);
+      setMessage(`An error occurred while creating the product: ${error}`);
     }
 
     else if (products.length > 0) {
-      setMessage('Ürün başarıyla oluşturuldu!');
+      setMessage('Product created successfully!');
 
       setTimeout(() => {
         setMessage('');
@@ -54,10 +52,9 @@ const CreateProductForm = () => {
     }
   };
 
-
   return (
     <div className="w-full mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Yeni Ürün Oluştur</h2>
+      <h2 className="text-2xl font-bold mb-4">Create New Product</h2>
 
       {message && (
         <div className={`p-4 rounded-lg mb-4 ${error ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
@@ -66,10 +63,10 @@ const CreateProductForm = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-        {/* Ürün Adı */}
+        {/* Product Name */}
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-            Ürün Adı
+            Product Name
           </label>
           <input
             type="text"
@@ -81,10 +78,10 @@ const CreateProductForm = () => {
           />
         </div>
 
-        {/* Fiyat */}
+        {/* Price */}
         <div className="mb-4">
           <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-            Fiyat
+            Price
           </label>
           <input
             type="number"
@@ -96,10 +93,10 @@ const CreateProductForm = () => {
           />
         </div>
 
-        {/* Resim */}
+        {/* Image */}
         <div className="mb-4">
           <label htmlFor="file" className="block text-sm font-medium text-gray-700">
-            Resim
+            Image
           </label>
           <input
             type="file"
@@ -109,10 +106,10 @@ const CreateProductForm = () => {
           />
         </div>
 
-        {/* Açıklama */}
+        {/* Description */}
         <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            Açıklama
+            Description
           </label>
           <textarea
             id="description"
@@ -123,14 +120,14 @@ const CreateProductForm = () => {
           />
         </div>
 
-        {/* Submit Butonu */}
+        {/* Submit Button */}
         <div className="mb-4">
           <button
             type="submit"
             disabled={loading}
             className={`w-full p-3 bg-blue-600 text-white rounded-md ${loading ? 'opacity-50' : ''}`}
           >
-            {loading ? 'Yükleniyor...' : 'Ürünü Oluştur'}
+            {loading ? 'Loading...' : 'Create Product'}
           </button>
         </div>
       </form>

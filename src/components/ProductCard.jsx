@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
         {/* Product Image */}
         {product?.imageUrl ? (
           <Image
-            src={product?.imageUrl} // Dynamically setting the image source
+            src={product?.imageUrl} 
             alt={product?.name}
             width={400}
             height={300}

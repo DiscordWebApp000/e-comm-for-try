@@ -1,4 +1,3 @@
-// src/actions/ratingActions.js
 import { fetchAverageRatingAPI, addRatingAPI } from '@/utils/api'; 
 
 export const fetchRating = (productId) => async (dispatch) => {

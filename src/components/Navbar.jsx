@@ -19,11 +19,9 @@ const Navbar = () => {
           <Image src="/images/logo.png" alt="Logo" width={100} height={50} />
         </Link>
 
-        {/* Hamburger Icon for Mobile */}
         <div className="lg:hidden flex items-center space-x-4">
           
 
-          {/* Profile & Cart for Mobile */}
           <div className="flex items-center space-x-4">
             {/* Conditional rendering for profile or login button */}
             {user ? (
@@ -56,7 +54,6 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Navigation Links (Center) */}
         <ul
           className={`lg:flex lg:space-x-6 absolute lg:static bg-gray-200 top-16 left-0 w-full lg:w-auto transition-transform transform ${
             menuOpen ? 'translate-x-0' : '-translate-x-full'
@@ -104,12 +101,10 @@ const Navbar = () => {
             </Link>
           )}
 
-          {/* Cart Icon */}
          
         </div>
       </div>
 
-      {/* Cart Dropdown */}
      
     </nav>
   );

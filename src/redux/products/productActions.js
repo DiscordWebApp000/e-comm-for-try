@@ -18,11 +18,10 @@ export const createProduct = (productData) => {
   return async (dispatch) => {
     dispatch({ type: 'CREATE_PRODUCT_START' });
     try {
-      const token = getToken(); // JWT token'ı al
+      const token = getToken();
       const response = await createProductAPI(productData, token); 
       dispatch({ type: 'CREATE_PRODUCT_SUCCESS', payload: response.data }); 
       
-      // Ürün oluşturulduktan sonra, ürünleri tekrar al
       dispatch(fetchProductsData());
     } catch (error) {
       dispatch({ type: 'CREATE_PRODUCT_FAILURE', payload: error.message });

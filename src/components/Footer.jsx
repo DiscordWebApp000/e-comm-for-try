@@ -4,10 +4,10 @@ const Footer = () => {
   return (
     <footer className="bg-gray-200 text-gray-700 py-12">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4 lg:px-10 max-w-[1400px] ">
-        {/* Sol: Logo ve Hakkımızda */}
+        {/* Left: Logo and AboutUs */}
         <div className="flex flex-col">
           <img
-            src="/images/logo.png" // Logonuzun yolunu düzenleyin
+            src="/images/logo.png"
             alt="Logo"
             className="w-32 h-auto mb-4"
           />
@@ -16,7 +16,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Orta Sol: Hızlı Erişim */}
+        {/* Middle Right */}
         <div>
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Hızlı Erişim</h3>
           <ul className="space-y-2">
@@ -43,7 +43,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Orta Sağ: Hizmetler */}
+        {/* Right */}
         <div>
           <h3 className="text-lg font-semibold mb-4 text-gray-800">Hizmetlerimiz</h3>
           <ul className="space-y-2">

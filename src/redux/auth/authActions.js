@@ -1,13 +1,12 @@
-import { loginAPI, registerAPI } from '@/utils/api';
+import { loginAPI, registerAPI , updateUserAPI  } from '@/utils/api';
 import { saveToken, decodeToken , clearToken , isTokenValid , getToken } from '@/utils/auth';
 
-// Kullanıcı kaydı işlemi
+// Register a new user
 export const register = (email, password, username, role) => {
   return async (dispatch) => {
     dispatch({ type: 'REGISTER_START' });
 
     try {
-      
       const response = await registerAPI({ email, password, username, role });
       dispatch({ type: 'REGISTER_SUCCESS', payload: response.data });
     } catch (error) {
@@ -19,7 +18,30 @@ export const register = (email, password, username, role) => {
   };
 };
 
-// Kullanıcı girişi işlemi
+// Update user profile
+export const updateUser = (userId, data , token) => {
+  return async (dispatch) => {
+    dispatch({ type: 'UPDATE_USER_START' });
+
+    try {
+      const response = await updateUserAPI(userId, data, token); 
+      const updatedUser = response.data;
+
+      dispatch({
+        type: 'UPDATE_USER_SUCCESS',
+        payload: updatedUser, 
+      });
+
+    } catch (error) {
+      dispatch({
+        type: 'UPDATE_USER_FAILURE',
+        payload: error.response?.data?.message || 'Güncelleme sırasında bir hata oluştu.',
+      });
+    }
+  };
+};
+
+// Handle user login
 export const login = (email, password) => {
   return async (dispatch) => {
     dispatch({ type: 'LOGIN_START' });
@@ -31,7 +53,6 @@ export const login = (email, password) => {
       if (token) {
         saveToken(token); 
         const decodedUser = decodeToken(); 
-        
 
         dispatch({
           type: 'LOGIN_SUCCESS',
@@ -52,7 +73,7 @@ export const login = (email, password) => {
   };
 };
 
-// Çıkış işlemi
+// Handle user logout
 export const logout = () => {
   return (dispatch) => {
     localStorage.removeItem('authToken'); 
@@ -60,7 +81,7 @@ export const logout = () => {
   };
 };
 
-
+// Check authentication token validity
 export const checkAuthToken = () => {
   return (dispatch) => {
     const token = getToken(); 

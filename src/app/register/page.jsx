@@ -5,18 +5,22 @@ import { useRouter } from 'next/navigation';
 import { register } from '@/redux/auth/authActions';
 
 const Register = () => {
+  // State to manage form inputs and error messages
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('CUSTOMER');
   const [error, setError] = useState('');
+  
   const dispatch = useDispatch();
   const router = useRouter();
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if passwords match
     if (password !== confirmPassword) {
       setError('Şifreler eşleşmiyor!');
       return;
@@ -118,7 +122,6 @@ const Register = () => {
                 <span className="ml-2 text-sm text-gray-700">Satıcı</span>
               </label>
             </div>
-
           </div>
           <button
             type="submit"
